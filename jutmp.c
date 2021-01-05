@@ -13,11 +13,20 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <errno.h>
+#include <setjmp.h>
+#include <argp.h>
+#include <stdbool.h>
 
-int BUFFER_SIZE = 1000;
+#include "jdumpertools.h"
 
-char * get_ut_type(int ut_type)
-{
+jmp_buf jmp_buffer;
+
+static const int BUFFER_SIZE = 1000;
+static char *filename = "/var/log/wtmp";
+static char *dest = "/tmp/jutmp.json";
+static const int logsize = 1000;
+
+char * get_ut_type(int ut_type) {
         if (ut_type == EMPTY)
                 return "Unknown";
         if (ut_type == RUN_LVL)
@@ -39,8 +48,7 @@ char * get_ut_type(int ut_type)
         return "Accounting";
 }
 
-void utmpprint(struct utmp *log, char *terminal, char *host, char * buffer)
-{
+void utmpprint(struct utmp *log, char *terminal, char *host, char * buffer) {
         time_t timestamp = log->ut_tv.tv_sec;
         char * timestamp_str = ctime(&timestamp);
 
@@ -71,22 +79,23 @@ void utmpprint(struct utmp *log, char *terminal, char *host, char * buffer)
                address);
 }
 
-int main()
-{
-        int logsize = 1000;
+int main() {
+
+        int val = setjmp(jmp_buffer);
+        if (val){
+                fprintf(stderr, "FATAL: Cannot continue, will exit!\n");
+                exit(100);
+        }
+
         int file;
         struct utmp log[logsize];
         int i = 0;
-        char *filename = "/var/log/wtmp";
-        char *dest = "/tmp/jutmp.json";
         file = open(filename, O_RDONLY);
-        if (file < 0)
-        {
-                printf("Failed to open");
-                return (100);
+        if (file < 0) {
+                fprintf(stderr, "ERROR Failed to open");
+                longjmp(jmp_buffer, 100);
         }
-        if (file)
-        {
+        if (file) {
                 read(file, &log, logsize * sizeof(struct utmp));
                 char terminal[UT_LINESIZE + 1];
                 char host[UT_HOSTSIZE + 1];
@@ -94,10 +103,10 @@ int main()
 
                 FILE * json_file = fopen(dest, "w");
                 if (! json_file) {
-                        printf("Error opening file %s: %s", filename, strerror(errno));
-                        exit(100);
+                        fprintf("ERROR: Opening file %s: %s", filename, strerror(errno));
+                        longjmp(jmp_buffer, 100);
                 }
-                printf("Opened '%s' for reading (saving results to %s)\n", filename, dest);
+                fprintf(stderr, "INFO: Opened '%s' for reading (saving results to %s)\n", filename, dest);
 
                 fprintf(json_file, "[");
                 for (i = 0; i < logsize; i++)
@@ -112,10 +121,9 @@ int main()
                 fprintf(json_file, "]\n");
                 fclose(json_file);
                 close(file);
-        }
-        else
-        {
-                return (100);
+        } else {
+                fprintf(stderr, "ERROR: No UTMP file!\n");
+                longjmp(jmp_buffer, 100);
         }
         return (0);
 }

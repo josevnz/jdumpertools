@@ -1,5 +1,4 @@
 /*
- * josevnz@kodegeek.com
  * Simple DU program
  */
 #include <sys/statvfs.h>
@@ -7,7 +6,8 @@
 #include <stdlib.h>
 #include <errno.h>
 #include <setjmp.h>
-#pragma pack(1)
+
+#include "jdumpertools.h"
 
 jmp_buf buffer;
 
@@ -16,7 +16,7 @@ int disk_details(char *path) {
     if (statvfs(path, &results) == -1) {
         int error_n = errno;
         if (error_n == ENOENT) {
-            printf("Error code: %d\n", error_n);
+            fprintf("ERROR: Code: %d\n", error_n);
             perror(path);
         } else {
             perror(path);
@@ -25,7 +25,7 @@ int disk_details(char *path) {
     }
     double free_space = (double) results.f_bavail * results.f_frsize;
     double total_space = (double) results.f_blocks * results.f_frsize;
-    printf("'%s' free space %.3f GB/%.3f GB\n", path, free_space/1024.0/1024.0/1024.0, total_space/1024.0/1024.0/1024.0);
+    fprintf(stderr, "INFO: '%s' free space %.3f GB/%.3f GB\n", path, free_space/1024.0/1024.0/1024.0, total_space/1024.0/1024.0/1024.0);
     return 0;
 }
 
@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
     
     int val = setjmp(buffer);
     if (val) {
-        printf("ERROR: Cannot recover, program will exit with an error now.\n");
+        fprintf(stderr, "ERROR: Cannot recover, program will exit with an error now.\n");
         exit(val);
     }
 
