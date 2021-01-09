@@ -82,8 +82,8 @@ void utmpprint(struct utmp *log, char *terminal, char *host, char * buffer) {
 int main() {
 
         int val = setjmp(jmp_buffer);
-        if (val){
-                fprintf(stderr, "FATAL: Cannot continue, will exit!\n");
+        if (val) {
+                Message("FATAL: %s, %d Cannot continue, will exit!\n", __func__, __LINE__);
                 exit(100);
         }
 
@@ -92,7 +92,7 @@ int main() {
         int i = 0;
         file = open(filename, O_RDONLY);
         if (file < 0) {
-                fprintf(stderr, "ERROR Failed to open");
+                Message("ERROR: %s:%d, Failed to open\n", __func__, __LINE__)
                 longjmp(jmp_buffer, 100);
         }
         if (file) {
@@ -103,10 +103,10 @@ int main() {
 
                 FILE * json_file = fopen(dest, "w");
                 if (! json_file) {
-                        fprintf(stderr, "ERROR: Opening file %s: %s", filename, strerror(errno));
+                        Message("ERROR: %s,%d: Opening file %s: %s\n", __func__, __LINE__, filename, strerror(errno))
                         longjmp(jmp_buffer, 100);
                 }
-                fprintf(stderr, "INFO: Opened '%s' for reading (saving results to %s)\n", filename, dest);
+                Message("INFO: Opened '%s' for reading (saving results to %s)\n", filename, dest)
 
                 fprintf(json_file, "[");
                 for (i = 0; i < logsize; i++)
@@ -122,7 +122,7 @@ int main() {
                 fclose(json_file);
                 close(file);
         } else {
-                fprintf(stderr, "ERROR: No UTMP file!\n");
+                Message("ERROR: %s, %d: No UTMP file!\n", __func__, __LINE__);
                 longjmp(jmp_buffer, 100);
         }
         return (0);

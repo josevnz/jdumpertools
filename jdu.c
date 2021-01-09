@@ -16,7 +16,7 @@ int disk_details(char *path) {
     if (statvfs(path, &results) == -1) {
         int error_n = errno;
         if (error_n == ENOENT) {
-            fprintf(stderr, "ERROR: Code: %d\n", error_n);
+            Message("ERROR: %s:%d, Code: %d\n", __func__, __LINE__, error_n)
             perror(path);
         } else {
             perror(path);
@@ -25,7 +25,7 @@ int disk_details(char *path) {
     }
     double free_space = (double) results.f_bavail * results.f_frsize;
     double total_space = (double) results.f_blocks * results.f_frsize;
-    fprintf(stderr, "INFO: '%s' free space %.3f GB/%.3f GB\n", path, free_space/1024.0/1024.0/1024.0, total_space/1024.0/1024.0/1024.0);
+    fprintf(stdout, "INFO: '%s' free space %.3f GB/%.3f GB\n", path, free_space/1024.0/1024.0/1024.0, total_space/1024.0/1024.0/1024.0);
     return 0;
 }
 
@@ -33,12 +33,12 @@ int main(int argc, char *argv[]) {
     
     int val = setjmp(buffer);
     if (val) {
-        fprintf(stderr, "ERROR: Cannot recover, program will exit with an error now.\n");
+        Message("ERROR: %s:%d: Cannot recover, program will exit with an error now.\n", __func__, __LINE__);
         exit(val);
     }
 
     if (argc == 1) {
-        fprintf(stderr, "ERROR: Need to pass one or more directories to check!\n");
+        Message("ERROR: %s:%d: Need to pass one or more directories to check!\n", __func__, __LINE__);
         longjmp(buffer, 100);
     }
 

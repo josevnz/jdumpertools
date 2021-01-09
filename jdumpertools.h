@@ -4,14 +4,18 @@
 #pragma GCC poison printf
 #pragma pack(1)
 
+#include <jansson.h>
+
 #ifndef JDUMPERTOOLS_VERSION
 #pragma GCC error "JDUMPERTOOLS_VERSION is missing, needs -DJDUMPERTOOLS_VERSION=$VERSION"
 #endif
 
-const char *argp_program_version;
-const char *argp_program_bug_address = "<kodegeek.com@protonmail.com>";
+#define AUTHOR_EMAIL "<kodegeek.com@protonmail.com>"
 
-#include <jansson.h>
+const char *argp_program_version;
+const char *argp_program_bug_address = AUTHOR_EMAIL;
+
+#define Message(format, ...) fprintf(stderr, format, __VA_ARGS__);
 
 #endif
 
