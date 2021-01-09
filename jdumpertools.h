@@ -11,5 +11,7 @@
 const char *argp_program_version;
 const char *argp_program_bug_address = "<kodegeek.com@protonmail.com>";
 
+#include <jansson.h>
+
 #endif
 

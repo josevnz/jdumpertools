@@ -1,7 +1,7 @@
 # Figure out a better way to update version here and on the Makefile
 VERSION=0
 CC=gcc
-CCFLAGS=-Wall -g -O2 -Wextra -std=c11 -DJDUMPERTOOLS_VERSION=$(VERSION)
+CCFLAGS=-Wall -g -O2 -Wextra -std=c11 -ljansson -DJDUMPERTOOLS_VERSION=$(VERSION)
 TARGETS=jdu jutmp
 NAME=jdumpertools
 TARFILE=$(NAME)-$(VERSION).tar.gz

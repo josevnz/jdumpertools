@@ -16,7 +16,7 @@ int disk_details(char *path) {
     if (statvfs(path, &results) == -1) {
         int error_n = errno;
         if (error_n == ENOENT) {
-            fprintf("ERROR: Code: %d\n", error_n);
+            fprintf(stderr, "ERROR: Code: %d\n", error_n);
             perror(path);
         } else {
             perror(path);

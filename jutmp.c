@@ -103,7 +103,7 @@ int main() {
 
                 FILE * json_file = fopen(dest, "w");
                 if (! json_file) {
-                        fprintf("ERROR: Opening file %s: %s", filename, strerror(errno));
+                        fprintf(stderr, "ERROR: Opening file %s: %s", filename, strerror(errno));
                         longjmp(jmp_buffer, 100);
                 }
                 fprintf(stderr, "INFO: Opened '%s' for reading (saving results to %s)\n", filename, dest);
