@@ -33,7 +33,7 @@ int main(int argc, char *argv[]) {
     
     int val = setjmp(buffer);
     if (val) {
-        Message("ERROR: %s:%d: Cannot recover, program will exit with an error now.\n", __func__, __LINE__);
+        Message("ERROR: %s:%s:%d: Cannot recover, program will exit with an error now.\n", __FILE__, __func__, __LINE__);
         exit(val);
     }
 

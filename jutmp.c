@@ -83,7 +83,7 @@ int main() {
 
         int val = setjmp(jmp_buffer);
         if (val) {
-                Message("FATAL: %s, %d Cannot continue, will exit!\n", __func__, __LINE__);
+                Message("FATAL: %s:%s, %d Cannot continue, will exit!\n", __FILE__, __func__, __LINE__);
                 exit(100);
         }
 
