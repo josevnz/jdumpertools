@@ -21,9 +21,11 @@ jmp_buf buffer;
 
 int disk_details(int num_paths, char **paths, FILE * json_file) {
 
+    DEBUG_PRINT("num_paths=%d\n", num_paths)
     fprintf(json_file, "[");
     for(int i =1; i < num_paths; i++) {
         char * path = paths[i];
+        DEBUG_PRINT("path=%s\n", paths[i])
         struct statvfs results;
         if (statvfs(path, &results) == -1) {
             int error_n = errno;

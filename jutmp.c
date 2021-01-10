@@ -92,6 +92,7 @@ void utmpprint(struct utmp *log, char *terminal, char *host, char * buffer, FILE
                log->ut_exit.e_termination,
                log->ut_exit.e_exit,
                address);
+        DEBUG_PRINT("buffer=%s\n", buffer)
         fprintf(json_file, buffer);
 }
 
@@ -100,6 +101,7 @@ int print_utmp(FILE * json_file) {
         int file;
         struct utmp log[logsize];
         int i = 0;
+        DEBUG_PRINT("filename=%s\n", filename)
         file = open(filename, O_RDONLY);
         if (file < 0) {
                 Message("ERROR: %s:%d, Failed to open\n", __func__, __LINE__)

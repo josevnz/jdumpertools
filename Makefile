@@ -1,7 +1,9 @@
 .DEFAULT_GOAL := all
 VERSION=0
 CC=gcc
-CCFLAGS=-Wall -g -O2 -Wextra -std=c11 -DJDUMPERTOOLS_VERSION=$(VERSION)
+# -Q --help=optimizers
+#DEBUG=-DDEBUG
+CCFLAGS=-Wall -Wall -g -Og -Wextra -Werror -std=c11 $(DEBUG) -DJDUMPERTOOLS_VERSION=$(VERSION)
 TARGETS=jdu jutmp
 NAME=jdumpertools
 TARFILE=$(NAME)-$(VERSION).tar.gz
