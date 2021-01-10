@@ -1,5 +1,20 @@
 /*
- * Simple program to read utmp log and create a nice JSON document from it.
+ * Read utmp log and create JSON document from it.
+ *   {
+ *   "timestamp": "Fri Sep  4 04:31:58 2020",
+ *   "user": "josevnz",
+ *   "pid": 1678,
+ *   "tty": ":0",
+ *   "session_id": 0,
+ *   "type_of_record": "NormalProcess",
+ *   "kernel": ":0",
+ *   "exit": {
+ *     "termination": 0,
+ *     "exit code": 0
+ *   },
+ *   "ip_addr": "0.0.0.0"
+ *   }
+ * ]
  */
 #include <unistd.h>
 #include <sys/stat.h>
@@ -48,7 +63,7 @@ char * get_ut_type(int ut_type) {
         return "Accounting";
 }
 
-void utmpprint(struct utmp *log, char *terminal, char *host, char * buffer) {
+void utmpprint(struct utmp *log, char *terminal, char *host, char * buffer, FILE * json_file) {
         time_t timestamp = log->ut_tv.tv_sec;
         char * timestamp_str = ctime(&timestamp);
 
@@ -77,15 +92,10 @@ void utmpprint(struct utmp *log, char *terminal, char *host, char * buffer) {
                log->ut_exit.e_termination,
                log->ut_exit.e_exit,
                address);
+        fprintf(json_file, buffer);
 }
 
-int main() {
-
-        int val = setjmp(jmp_buffer);
-        if (val) {
-                Message("FATAL: %s:%s, %d Cannot continue, will exit!\n", __FILE__, __func__, __LINE__);
-                exit(100);
-        }
+int print_utmp(FILE * json_file) {
 
         int file;
         struct utmp log[logsize];
@@ -101,29 +111,41 @@ int main() {
                 char host[UT_HOSTSIZE + 1];
                 char buffer[BUFFER_SIZE];
 
-                FILE * json_file = fopen(dest, "w");
-                if (! json_file) {
-                        Message("ERROR: %s,%d: Opening file %s: %s\n", __func__, __LINE__, filename, strerror(errno))
-                        longjmp(jmp_buffer, 100);
-                }
-                Message("INFO: Opened '%s' for reading (saving results to %s)\n", filename, dest)
-
                 fprintf(json_file, "[");
                 for (i = 0; i < logsize; i++)
                 {
-                        utmpprint(&log[i], terminal, host, buffer);
-                        fprintf(json_file, buffer);
+                        utmpprint(&log[i], terminal, host, buffer, json_file);
                         if (i < logsize - 1)
                         {
                                 fprintf(json_file, ",");
                         }
                 }
                 fprintf(json_file, "]\n");
-                fclose(json_file);
                 close(file);
         } else {
-                Message("ERROR: %s, %d: No UTMP file!\n", __func__, __LINE__);
+                Message("ERROR: %s, %d: No UTMP file!\n", __func__, __LINE__)
                 longjmp(jmp_buffer, 100);
         }
+        return 0;
+}
+
+int main() {
+
+        int val = setjmp(jmp_buffer);
+        if (val) {
+                Message("FATAL: %s:%s, %d Cannot continue, will exit!\n", __FILE__, __func__, __LINE__)
+                exit(100);
+        }
+
+        // int parse_res = argp_parse(0, argc, argv, 0, 0, 0);
+
+        FILE * json_file = fopen(dest, "w");
+        if (! json_file) {
+                Message("ERROR: %s,%d: Opening file %s: %s\n", __func__, __LINE__, filename, strerror(errno))
+                longjmp(jmp_buffer, 100);
+        }
+        Message("INFO: Opened '%s' for reading (saving results to %s)\n", filename, dest)
+        print_utmp(json_file);
+        fclose(json_file);
         return (0);
 }

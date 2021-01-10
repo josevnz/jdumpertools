@@ -1,15 +1,17 @@
-# Figure out a better way to update version here and on the Makefile
+.DEFAULT_GOAL := all
 VERSION=0
 CC=gcc
-CCFLAGS=-Wall -g -O2 -Wextra -std=c11 -ljansson -DJDUMPERTOOLS_VERSION=$(VERSION)
+CCFLAGS=-Wall -g -O2 -Wextra -std=c11 -DJDUMPERTOOLS_VERSION=$(VERSION)
 TARGETS=jdu jutmp
 NAME=jdumpertools
 TARFILE=$(NAME)-$(VERSION).tar.gz
 
-jdu: jdu.c
+all: $(TARGETS)
+
+jdu: jdumpertools.h jdu.c
 	$(CC) $^ $(CCFLAGS) -o $@
 
-jutmp: jutmp.c
+jutmp: jdumpertools.h jutmp.c
 	$(CC) $^ $(CCFLAGS) -o $@
 
 clean:
@@ -22,5 +24,3 @@ rpm:
 
 docker: all
 	/usr/bin/docker build $(PWD)
-
-all: $(TARGETS)

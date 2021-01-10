@@ -1,10 +1,12 @@
 #ifndef __JDUMPERTOOLS__
 
 #define __JDUMPERTOOLS__
+
+#include <argp.h>
+
 #pragma GCC poison printf
 #pragma pack(1)
 
-#include <jansson.h>
 
 #ifndef JDUMPERTOOLS_VERSION
 #pragma GCC error "JDUMPERTOOLS_VERSION is missing, needs -DJDUMPERTOOLS_VERSION=$VERSION"
