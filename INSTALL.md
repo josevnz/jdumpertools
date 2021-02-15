@@ -35,6 +35,14 @@ rpm -Uhv jdumpertools-0-1.fc33.x86_64.rpm
 
 __Comming soon__
 
+## From source
+
+Just copy the libjdumpertools.so to your $$HOME/lib directory and jdu, jutmp to $HOME/bin. You will need to update your LD_LIBRARY_PATH:
+```
+# Add this to your ~/.bash_profile
+export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
+```
+
 
 # Bugs / feature request
 
