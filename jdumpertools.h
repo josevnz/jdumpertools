@@ -3,6 +3,7 @@
 #define __JDUMPERTOOLS__
 
 #include <argp.h>
+#include <setjmp.h>
 
 #pragma GCC poison printf
 #pragma pack(1)
@@ -25,6 +26,10 @@ const char *argp_program_bug_address = AUTHOR_EMAIL;
 #else
 #define DEBUG_PRINT(fmt, args...)
 #endif
+
+jmp_buf buffer;
+
+int disk_details(int num_paths, char **paths, FILE * json_file);
 
 #endif
 

@@ -15,7 +15,7 @@ Requires:       bash
 
 %description
 
-This is a collection of programs that can be used to dump output in JSON format, so it can be ingested by other tools.
+This is a collection of programs that can be used to dump linux usage data in JSON format, so it can be ingested by other tools.
 
 * jdu: Similar to UNIX 'du' command.
 * jutmp: UTMP database dumper
@@ -32,6 +32,8 @@ make all
 rm -rf $RPM_BUILD_ROOT
 /usr/bin/mkdir -p $RPM_BUILD_ROOT/%{_bindir}
 /usr/bin/cp -v -p jdu jutmp $RPM_BUILD_ROOT/%{_bindir}
+/usr/bin/mkdir -p $RPM_BUILD_ROOT/%{_libdir}
+/usr/bin/cp -v -p libjdumpertools.so $RPM_BUILD_ROOT/%{_libdir}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -39,6 +41,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %{_bindir}/jdu
 %{_bindir}/jutmp
+%{_libdir}/libjdumpertools.so
 %license LICENSE
 %doc README.md
 

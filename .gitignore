@@ -2,3 +2,4 @@ gmon.out
 *.json
 jdu
 jutmp
+*.so

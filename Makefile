@@ -4,18 +4,21 @@ CC=gcc
 # -Q --help=optimizers
 #DEBUG=-DDEBUG
 PROFILING=-pg
-CCFLAGS=-Wall -Wall -g -Og -Wextra -Werror -std=c11 $(PROFILING) $(DEBUG) -DJDUMPERTOOLS_VERSION=$(VERSION)
+CCFLAGS=-Wall -g -Og -Wextra -Werror -std=c11 $(PROFILING) $(DEBUG) -DJDUMPERTOOLS_VERSION=$(VERSION)
 TARGETS=jdu jutmp
 NAME=jdumpertools
 TARFILE=$(NAME)-$(VERSION).tar.gz
 
 all: $(TARGETS)
 
-jdu: jdumpertools.h jdu.c
-	$(CC) $^ $(CCFLAGS) -o $@
+libjdumpertools.so: jdumpertools.h jdumpertools.c
+	$(CC) $(CCFLAGS) -fPIC $^ -I $(PWD) -shared -o $@
+
+jdu: jdumpertools.h jdu.c libjdumpertools.so
+	$(CC) $^ $(CCFLAGS) -L $(PWD) -l jdumpertools -o $@
 
 jutmp: jdumpertools.h jutmp.c
-	$(CC) $^ $(CCFLAGS) -o $@
+	$(CC) $^ $(CCFLAGS) -L $(PWD) -l jdumpertools -o $@
 
 clean:
 	/bin/rm -f $(TARGETS)
