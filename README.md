@@ -8,7 +8,7 @@ They do not intend to replace tools like 'du' or 'who' and their functionality i
 * Be easy to use
 * Be fast
 
-You can manipulate their output with other cool tools like [Python](https://www.python.org/), [JQ](https://stedolan.github.io/jq/), etc.
+You can manipulate their output with other cool programing languajes like [Python](https://www.python.org/), or tools like [JQ](https://stedolan.github.io/jq/).
 
 # AUTHOR
 - Jose Vicente Nunez (kodegeek.com@protonmail.com)

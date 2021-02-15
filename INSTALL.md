@@ -26,13 +26,19 @@ make docker
 
 # Installation
 
+## RPM
+```
+rpm -Uhv jdumpertools-0-1.fc33.x86_64.rpm
 ```
 
-```
+## Docker
+
+__Comming soon__
+
 
 # Bugs / feature request
 
-This software was tested on Fedora 29 Linux. 
+This software was tested on Fedora 33.
 
 If you find a bug please report it on GitHub.
 
