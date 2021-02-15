@@ -8,8 +8,8 @@ License:        GPL
 URL:            https://github.com/kodegeek-test/jdumpertools
 Source0:        %{name}-%{version}.tar.gz
 
-BuildRequires:  bash,tar,gzip,rpmdevtools,jansson,jansson-devel
-Requires:       bash,jansson
+BuildRequires:  bash,tar,gzip,rpmdevtools,rpmlint
+Requires:       bash
 
 %global debug_package %{nil}
 
