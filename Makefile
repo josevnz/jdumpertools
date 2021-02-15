@@ -30,4 +30,4 @@ rpm:
 
 docker: all
     # Not ready yet
-	echo /usr/bin/docker build $(PWD)
+	/usr/bin/docker build $(PWD)
