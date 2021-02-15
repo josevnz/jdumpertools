@@ -3,7 +3,8 @@ VERSION=0
 CC=gcc
 # -Q --help=optimizers
 #DEBUG=-DDEBUG
-CCFLAGS=-Wall -Wall -g -Og -Wextra -Werror -std=c11 $(DEBUG) -DJDUMPERTOOLS_VERSION=$(VERSION)
+PROFILING=-pg
+CCFLAGS=-Wall -Wall -g -Og -Wextra -Werror -std=c11 $(PROFILING) $(DEBUG) -DJDUMPERTOOLS_VERSION=$(VERSION)
 TARGETS=jdu jutmp
 NAME=jdumpertools
 TARFILE=$(NAME)-$(VERSION).tar.gz
