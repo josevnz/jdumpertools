@@ -27,14 +27,14 @@ Jdumpertools is a collection of programs that can be used to dump linux usage da
 make all
 
 %install
-rm -rf $RPM_BUILD_ROOT
-/usr/bin/mkdir -p $RPM_BUILD_ROOT/%{_bindir}
-/usr/bin/cp -v -p jdu jutmp $RPM_BUILD_ROOT/%{_bindir}
-/usr/bin/mkdir -p $RPM_BUILD_ROOT/%{_libdir}
-/usr/bin/cp -v -p libjdumpertools.so $RPM_BUILD_ROOT/%{_libdir}
+rm -rf %{buildroot}
+/usr/bin/mkdir -p %{buildroot}/%{_bindir}
+/usr/bin/cp -v -p jdu jutmp %{buildroot}/%{_bindir}
+/usr/bin/mkdir -p %{buildroot}/%{_libdir}
+/usr/bin/cp -v -p libjdumpertools.so %{buildroot}/%{_libdir}
 
 %clean
-rm -rf $RPM_BUILD_ROOT
+rm -rf %{buildroot}
 
 %files
 %{_bindir}/jdu
