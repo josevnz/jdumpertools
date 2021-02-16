@@ -30,4 +30,4 @@ rpm: all
 
 docker: rpm
     # Not ready yet
-	/usr/bin/docker build $(PWD)
+	DOCKER_BUILDKIT=1 /usr/bin/docker build $(PWD)
