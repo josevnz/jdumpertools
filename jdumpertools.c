@@ -1,11 +1,15 @@
+/*
+ * Library of functions used across the jdumpertools programs.
+ * author: Jose Vicente Nunez
+ */
+#include "jdumpertools.h"
 #include <sys/statvfs.h>
-#include <setjmp.h>
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <time.h>
-#include <string.h>
-#include "jdumpertools.h"
+#include <unistd.h>
+
 
 int disk_details(int num_paths, char **paths, FILE * json_file) {
     struct statvfs results;
@@ -22,7 +26,7 @@ int disk_details(int num_paths, char **paths, FILE * json_file) {
             } else {
                 perror(path);
             }
-            longjmp(buffer, 100);
+            longjmp(jmp_buffer, 100);
         }
         double free_space = (double) results.f_bavail * results.f_frsize;
         double total_space = (double) results.f_blocks * results.f_frsize;
@@ -102,4 +106,39 @@ bool utmpprint(const int idx, struct utmp *log, char *terminal, char *host, char
         DEBUG_PRINT("buffer=%s\n", buffer)
         fprintf(json_file, buffer);
         return true;
+}
+
+int print_utmp(FILE * json_file) {
+
+        int file;
+        struct utmp log[LOG_SIZE];
+        int i = 0;
+        DEBUG_PRINT("filename=%s\n", filename)
+        file = open(WTMP_FILE, O_RDONLY);
+        if (file < 0) {
+                Message("ERROR: %s:%d, Failed to open\n", __func__, __LINE__)
+                longjmp(jmp_buffer, 100);
+        }
+        if (file) {
+                int bytes_read = read(file, &log, LOG_SIZE * sizeof(struct utmp));
+                DEBUG_PRINT("UTMP bytes read: %d\n", bytes_read);
+                if (bytes_read < 0) {
+                        Message("ERROR: %s:%d, Failed to open\n", __func__, __LINE__)
+                        longjmp(jmp_buffer, 100);
+                }
+                char terminal[UT_LINESIZE + 1];
+                char host[UT_HOSTSIZE + 1];
+                char buffer[BUFFER_SIZE];
+
+                fprintf(json_file, "[");
+                for (i = 0; i < LOG_SIZE; i++) {
+                        utmpprint(i, &log[i], terminal, host, buffer, json_file);
+                }
+                fprintf(json_file, "]\n");
+                close(file);
+        } else {
+                Message("ERROR: %s, %d: No UTMP file!\n", __func__, __LINE__)
+                longjmp(jmp_buffer, 100);
+        }
+        return 0;
 }

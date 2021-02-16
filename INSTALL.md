@@ -33,7 +33,13 @@ rpm -Uhv jdumpertools-0-1.fc33.x86_64.rpm
 
 ## Docker
 
-__Comming soon__
+You need to install Docker. Please follow this [directions](https://docs.docker.com/engine/install/fedora/)
+
+[Official repository](https://hub.docker.com/r/josevnz/jdumpertools)
+
+```
+docker pull josevnz/jdumpertools
+```
 
 ## From source
 
@@ -42,7 +48,6 @@ Just copy the libjdumpertools.so to your $$HOME/lib directory and jdu, jutmp to 
 # Add this to your ~/.bash_profile
 export LD_LIBRARY_PATH=$HOME/lib:$LD_LIBRARY_PATH
 ```
-
 
 # Bugs / feature request
 

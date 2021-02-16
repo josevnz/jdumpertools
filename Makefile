@@ -23,11 +23,11 @@ jutmp: jdumpertools.h jutmp.c
 clean:
 	/bin/rm -f $(TARGETS)
 
-rpm:
+rpm: all
 	/usr/bin/rpmdev-setuptree
 	/usr/bin/tar --exclude-vcs --directory ../ --create --verbose --gzip --file $(HOME)/rpmbuild/SOURCES/$(TARFILE) $(NAME)
 	/usr/bin/rpmbuild -ba jdumpertools.spec
 
-docker: all
+docker: rpm
     # Not ready yet
 	/usr/bin/docker build $(PWD)

@@ -2,7 +2,7 @@ Name:           jdumpertools
 # TODO: Figure out a better way to update version here and on Makefile
 Version:        0        
 Release:        1%{?dist}
-Summary:        Tools to dump output from several tools in JSON format, quickly.
+Summary:        Programs that can be used to dump Linux usage data in JSON format. 
 
 License:        GPL
 URL:            https://github.com/kodegeek-test/jdumpertools
@@ -15,12 +15,10 @@ Requires:       bash
 
 %description
 
-This is a collection of programs that can be used to dump linux usage data in JSON format, so it can be ingested by other tools.
+Jdumpertools is a collection of programs that can be used to dump linux usage data in JSON format, so it can be ingested by other tools.
 
 * jdu: Similar to UNIX 'du' command.
 * jutmp: UTMP database dumper
-
-All the tools support the '--help' flag.
 
 %prep
 %setup -q -n jdumpertools

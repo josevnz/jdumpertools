@@ -9,17 +9,11 @@
  *   }
  * ]
  */
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <setjmp.h>
-
 #include "jdumpertools.h"
-
 
 int main(int argc, char *argv[]) {
     
-    int val = setjmp(buffer);
+    int val = setjmp(jmp_buffer);
     if (val) {
         Message("ERROR: %s:%s:%d: Cannot recover, program will exit with an error now.\n", __FILE__, __func__, __LINE__)
         exit(val);
@@ -29,9 +23,8 @@ int main(int argc, char *argv[]) {
 
     if (argc == 1) {
         Message("ERROR: %s:%d: Need to pass one or more directories to check!\n", __func__, __LINE__)
-        longjmp(buffer, 100);
+        longjmp(jmp_buffer, 100);
     }
-    
     
     disk_details(argc, argv, stdout);
     
