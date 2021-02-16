@@ -3,11 +3,12 @@ VERSION=0
 CC=gcc
 # -Q --help=optimizers
 #DEBUG=-DDEBUG
-PROFILING=-pg
+#PROFILING=-pg
 CCFLAGS=-Wall -g -Og -Wextra -Werror -std=c11 $(PROFILING) $(DEBUG) -DJDUMPERTOOLS_VERSION=$(VERSION)
 TARGETS=jdu jutmp libjdumpertools.so
 NAME=jdumpertools
 TARFILE=$(NAME)-$(VERSION).tar.gz
+DOCKER_FLAGS=--tag josevnz/jdumpertools:$(VERSION) --rm --pull --file Dockerfile --compress
 
 all: $(TARGETS)
 
@@ -30,4 +31,4 @@ rpm: all
 
 docker: rpm
     # Not ready yet
-	DOCKER_BUILDKIT=1 /usr/bin/docker build $(PWD)
+	DOCKER_BUILDKIT=1 /usr/bin/docker build $(DOCKER_FLAGS) $(PWD)
