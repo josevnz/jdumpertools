@@ -45,7 +45,7 @@ jmp_buf jmp_buffer;
 
 int disk_details(int num_paths, char **paths, FILE * json_file);
 char * get_ut_type(const int ut_type);
-bool utmpprint(const int idx, struct utmp *log, char *terminal, char *host, char * buffer, FILE * json_file);
+bool utmpprint(const int idx, struct utmp *log, char *terminal, char *host, FILE * json_file);
 int print_utmp(FILE * json_file);
 
 #endif

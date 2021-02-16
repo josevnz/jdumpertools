@@ -4,7 +4,7 @@ CC=gcc
 # -Q --help=optimizers
 #DEBUG=-DDEBUG
 #PROFILING=-pg
-CCFLAGS=-Wall -g -Og -Wextra -Werror -std=c11 $(PROFILING) $(DEBUG) -DJDUMPERTOOLS_VERSION=$(VERSION)
+CCFLAGS=-Wall -g -Og -Wextra -Werror -Werror=format-security -std=c11 $(PROFILING) $(DEBUG) -DJDUMPERTOOLS_VERSION=$(VERSION)
 TARGETS=jdu jutmp libjdumpertools.so
 NAME=jdumpertools
 TARFILE=$(NAME)-$(VERSION).tar.gz

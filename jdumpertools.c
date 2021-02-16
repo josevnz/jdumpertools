@@ -61,7 +61,7 @@ char * get_ut_type(const int ut_type) {
         return "Accounting";
 }
 
-bool utmpprint(const int idx, struct utmp *log, char *terminal, char *host, char * buffer, FILE * json_file) {
+bool utmpprint(const int idx, struct utmp *log, char *terminal, char *host, FILE * json_file) {
 
         if (log->ut_type == EMPTY || log->ut_type == ACCOUNTING) {
                 return false;
@@ -89,10 +89,7 @@ bool utmpprint(const int idx, struct utmp *log, char *terminal, char *host, char
         if (idx > 0) {
             fprintf(json_file, ",");
         }
-        snprintf(
-               buffer,
-               BUFFER_SIZE,
-               "{ \"timestamp\": \"%s\", \"user\": \"%s\", \"pid\": %d, \"tty\": \"%s\", \"session_id\": %d,\"type_of_record\": \"%s\", \"kernel\": \"%s\", \"exit\": {\"termination\": %i, \"exit code\": %i}, \"ip_addr\": \"%s\" }",
+        fprintf(json_file, "{ \"timestamp\": \"%s\", \"user\": \"%s\", \"pid\": %d, \"tty\": \"%s\", \"session_id\": %d,\"type_of_record\": \"%s\", \"kernel\": \"%s\", \"exit\": {\"termination\": %i, \"exit code\": %i}, \"ip_addr\": \"%s\" }",
                strtok(timestamp_str, "\n\0"),
                log->ut_user,
                log->ut_pid,
@@ -103,8 +100,6 @@ bool utmpprint(const int idx, struct utmp *log, char *terminal, char *host, char
                log->ut_exit.e_termination,
                log->ut_exit.e_exit,
                address);
-        DEBUG_PRINT("buffer=%s\n", buffer)
-        fprintf(json_file, buffer);
         return true;
 }
 
@@ -128,11 +123,10 @@ int print_utmp(FILE * json_file) {
                 }
                 char terminal[UT_LINESIZE + 1];
                 char host[UT_HOSTSIZE + 1];
-                char buffer[BUFFER_SIZE];
 
                 fprintf(json_file, "[");
                 for (i = 0; i < LOG_SIZE; i++) {
-                        utmpprint(i, &log[i], terminal, host, buffer, json_file);
+                        utmpprint(i, &log[i], terminal, host, json_file);
                 }
                 fprintf(json_file, "]\n");
                 close(file);
