@@ -1,6 +1,6 @@
 Name:           jdumpertools
 # TODO: Figure out a better way to update version here and on Makefile
-Version:        0        
+Version:        v0.1        
 Release:        1%{?dist}
 Summary:        Programs that can be used to dump Linux usage data in JSON format. 
 

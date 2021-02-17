@@ -1,5 +1,5 @@
 .DEFAULT_GOAL := all
-VERSION=0
+VERSION=v0.1
 CC=gcc
 # -Q --help=optimizers
 #DEBUG=-DDEBUG
