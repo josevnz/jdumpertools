@@ -36,7 +36,7 @@ int main() {
                 Message("ERROR: %s,%d: Opening file %s: %s\n", __func__, __LINE__, WTMP_FILE, strerror(errno))
                 longjmp(jmp_buffer, 100);
         }
-        Message("INFO: Opened '%s' for reading (saving results to %s)\n", WTMP_FILE, dest)
+        Message("INFO: Opening '%s' for reading (saving results to %s)\n", WTMP_FILE, dest)
         print_utmp(json_file);
         fclose(json_file);
         return (0);

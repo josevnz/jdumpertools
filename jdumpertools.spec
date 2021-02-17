@@ -4,11 +4,11 @@ Version:        0
 Release:        1%{?dist}
 Summary:        Programs that can be used to dump Linux usage data in JSON format. 
 
-License:        GPL
-URL:            https://github.com/kodegeek-test/jdumpertools
+License:        Apache License 2.0
+URL:            https://github.com/josevnz/jdumpertools
 Source0:        %{name}-%{version}.tar.gz
 
-BuildRequires:  bash,tar,gzip,rpmdevtools,rpmlint
+BuildRequires:  bash,tar,gzip,rpmdevtools,rpmlint,make,gcc >= 10.2.1
 Requires:       bash
 
 %global debug_package %{nil}

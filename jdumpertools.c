@@ -1,5 +1,5 @@
 /*
- * Library of functions used across the jdumpertools programs.
+ * Functions used across the jdumpertools programs.
  * author: Jose Vicente Nunez
  */
 #include "jdumpertools.h"
@@ -12,11 +12,11 @@
 
 static const int TIMESTAMP_SIZE = 100;
 
-int disk_details(int num_paths, char **paths, FILE * json_file) {
+int disk_details(int num_paths, char **paths, FILE * dest_file, int start_idx) {
     struct statvfs results;
     DEBUG_PRINT("num_paths=%d\n", num_paths)
-    fprintf(json_file, "[");
-    for(int i =1; i < num_paths; i++) {
+    fprintf(dest_file, "[");
+    for(int i =start_idx; i < num_paths; i++) {
         char * path = paths[i];
         DEBUG_PRINT("path=%s\n", paths[i])
         if (statvfs(path, &results) == -1) {
@@ -31,12 +31,12 @@ int disk_details(int num_paths, char **paths, FILE * json_file) {
         }
         double free_space = (double) results.f_bavail * results.f_frsize;
         double total_space = (double) results.f_blocks * results.f_frsize;
-        fprintf(json_file, "{\"partition\": \"%s\", \"free_space\": %f, \"total_space\": %f}", path, free_space, total_space);
+        fprintf(dest_file, "{\"partition\": \"%s\", \"free_space\": %f, \"total_space\": %f}", path, free_space, total_space);
         if (i< num_paths -1) {
-            fprintf(json_file, ",");
+            fprintf(dest_file, ",");
         }
     } // end loop
-    fprintf(json_file, "]\n");
+    fprintf(dest_file, "]\n");
     return 0;
 }
 
@@ -62,7 +62,7 @@ char * get_ut_type(const int ut_type) {
         return "Accounting";
 }
 
-bool utmpprint(const int idx, struct utmp *log, char *terminal, char *host, FILE * json_file) {
+bool utmpprint(const int idx, struct utmp *log, char *terminal, char *host, FILE * dest_file) {
 
         if (log->ut_type == EMPTY || log->ut_type == ACCOUNTING) {
                 return false;
@@ -89,9 +89,9 @@ bool utmpprint(const int idx, struct utmp *log, char *terminal, char *host, FILE
         char * address = inet_ntoa(ipnetw);
         char * utype = get_ut_type(log->ut_type);
         if (idx > 0) {
-            fprintf(json_file, ",");
+            fprintf(dest_file, ",");
         }
-        fprintf(json_file, "{ \"timestamp\": \"%s\", \"user\": \"%s\", \"pid\": %d, \"tty\": \"%s\", \"session_id\": %d,\"type_of_record\": \"%s\", \"kernel\": \"%s\", \"exit\": {\"termination\": %i, \"exit code\": %i}, \"ip_addr\": \"%s\" }",
+        fprintf(dest_file, "{ \"timestamp\": \"%s\", \"user\": \"%s\", \"pid\": %d, \"tty\": \"%s\", \"session_id\": %d,\"type_of_record\": \"%s\", \"kernel\": \"%s\", \"exit\": {\"termination\": %i, \"exit code\": %i}, \"ip_addr\": \"%s\" }",
                strtok(timestamp_str, "\n\0"),
                log->ut_user,
                log->ut_pid,

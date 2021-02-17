@@ -4,7 +4,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <argp.h>
 #include <errno.h>
 #include <setjmp.h>
 #include <utmp.h>
@@ -12,6 +11,8 @@
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <string.h>
+#include <ctype.h>
+#include <getopt.h>
 
 /*
  * I don't want to use printf by accident. Poison it...
@@ -43,9 +44,9 @@ const int LOG_SIZE = 1000;
 
 jmp_buf jmp_buffer;
 
-int disk_details(int num_paths, char **paths, FILE * json_file);
+int disk_details(int num_paths, char **paths, FILE * dest_file, int start_idx);
 char * get_ut_type(const int ut_type);
-bool utmpprint(const int idx, struct utmp *log, char *terminal, char *host, FILE * json_file);
+bool utmpprint(const int idx, struct utmp *log, char *terminal, char *host, FILE * dest_file);
 int print_utmp(FILE * json_file);
 
 #endif
