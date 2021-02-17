@@ -10,6 +10,7 @@
 #include <time.h>
 #include <unistd.h>
 
+static const int TIMESTAMP_SIZE = 100;
 
 int disk_details(int num_paths, char **paths, FILE * json_file) {
     struct statvfs results;
@@ -68,13 +69,14 @@ bool utmpprint(const int idx, struct utmp *log, char *terminal, char *host, FILE
         }
 
         time_t timestamp = log->ut_tv.tv_sec;
-        struct tm * times = gmtime(&timestamp);
+        struct tm * times = localtime(&timestamp);
         const int record_year = 1900 + times->tm_year;
         if (record_year <= IGNORE_YEAR) {
                 DEBUG_PRINT("Ignored year: %d\n", record_year);
                 return false;
         }
-        char * timestamp_str = ctime(&timestamp);
+        char timestamp_str[TIMESTAMP_SIZE];
+        strftime(timestamp_str, TIMESTAMP_SIZE,"%c", times);
 
         memset(terminal, '\0', UT_LINESIZE + 1);
         strncpy(terminal, log->ut_line, UT_LINESIZE);
