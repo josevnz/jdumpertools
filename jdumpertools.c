@@ -105,7 +105,7 @@ bool utmpprint(const int idx, struct utmp *log, char *terminal, char *host, FILE
         return true;
 }
 
-int print_utmp(FILE * json_file) {
+int print_utmp(FILE * dest_file) {
 
         int file;
         struct utmp log[LOG_SIZE];
@@ -126,11 +126,11 @@ int print_utmp(FILE * json_file) {
                 char terminal[UT_LINESIZE + 1];
                 char host[UT_HOSTSIZE + 1];
 
-                fprintf(json_file, "[");
+                fprintf(dest_file, "[");
                 for (i = 0; i < LOG_SIZE; i++) {
-                        utmpprint(i, &log[i], terminal, host, json_file);
+                        utmpprint(i, &log[i], terminal, host, dest_file);
                 }
-                fprintf(json_file, "]\n");
+                fprintf(dest_file, "]\n");
                 close(file);
         } else {
                 Message("ERROR: %s, %d: No UTMP file!\n", __func__, __LINE__)

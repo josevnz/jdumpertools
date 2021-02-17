@@ -19,9 +19,7 @@
  */
 #include "jdumpertools.h"
 
-static char *dest = "/tmp/jutmp.json";
-
-int main() {
+int main(int argc, char *argv[]) {
 
         int val = setjmp(jmp_buffer);
         if (val) {
@@ -29,15 +27,42 @@ int main() {
                 exit(100);
         }
 
-        // int parse_res = argp_parse(0, argc, argv, 0, 0, 0);
+        char *file_name = NULL;
+        int c;
 
-        FILE * json_file = fopen(dest, "w");
-        if (! json_file) {
-                Message("ERROR: %s,%d: Opening file %s: %s\n", __func__, __LINE__, WTMP_FILE, strerror(errno))
-                longjmp(jmp_buffer, 100);
+        opterr = 0;
+
+        while ((c = getopt (argc, argv, "f:")) != -1)
+                switch (c) {
+                        case 'f':
+                                file_name = optarg;
+                                break;
+                        case '?':
+                                if (optopt == 'f') {
+                                        Message("Option -%c requires an argument.\n", optopt)
+                                } else if (isprint(optopt)) {
+                                        Message("Unknown option `-%c'.\n", optopt)
+                                } else {
+                                        Message("Unknown option character `\\x%x'.\n", optopt)
+                                        return 100;
+                                }
+                                break;
+                        default:
+                                abort();
+                }
+
+        FILE * destination_file = stdout;
+        if (file_name != NULL ) {
+                destination_file = fopen(file_name, "w");
+                if (! destination_file) {
+                        Message("ERROR: %s,%d: Opening file %s: %s\n", __func__, __LINE__, file_name, strerror(errno))
+                        longjmp(jmp_buffer, 100);
+                }
+                Message("INFO: Opening '%s' for reading (saving results to %s)\n", WTMP_FILE, file_name)
+        } else {
+                Message("INFO: Opening '%s' for reading (saving results to STDOUT)\n", WTMP_FILE)
         }
-        Message("INFO: Opening '%s' for reading (saving results to %s)\n", WTMP_FILE, dest)
-        print_utmp(json_file);
-        fclose(json_file);
+        print_utmp(destination_file);
+        fclose(destination_file);
         return (0);
 }
