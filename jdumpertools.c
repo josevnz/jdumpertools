@@ -139,7 +139,11 @@ int print_utmp(FILE * dest_file) {
         return 0;
 }
 
-void alarmHandler(int signal) {
+void alarmHandler(const int signal) {
         Message("ERROR: %s, %d: Program took too long to finish (SIGNAL=%d)!\n", __func__, __LINE__, signal)
         abort();
+}
+
+void ignoreNohupHandler(const int signal) {
+        Message("INFO: %s, %d: Ignoring NOHUP (SIGNAL=%d)!\n", __func__, __LINE__, signal)
 }

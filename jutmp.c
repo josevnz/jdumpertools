@@ -29,7 +29,19 @@ int main(int argc, char *argv[]) {
                 exit(100);
         }
 
-        signal(SIGALRM, alarmHandler);
+        void (*sigHandlerReturn) (int);
+
+        sigHandlerReturn = signal(SIGALRM, alarmHandler);
+        if (sigHandlerReturn == SIG_ERR) {
+                perror("Signal error!");
+                longjmp(jmp_buffer,100);
+        }
+        
+        sigHandlerReturn = signal(SIGHUP, ignoreNohupHandler);
+        if (sigHandlerReturn == SIG_ERR) {
+                perror("Signal error!");
+                longjmp(jmp_buffer,100);
+        }
 
         char *file_name = NULL;
         int c;

@@ -11,7 +11,7 @@
  */
 #include "jdumpertools.h"
 
-static const int MAX_WAIT = 60;
+static const int MAX_ALARM_WAIT = 60;
 
 int main(int argc, char *argv[]) {
     
@@ -21,7 +21,18 @@ int main(int argc, char *argv[]) {
         exit(val);
     }
 
-    signal(SIGALRM, alarmHandler);
+    void (*sigHandlerReturn) (int);
+
+    sigHandlerReturn = signal(SIGALRM, alarmHandler);
+    if (sigHandlerReturn == SIG_ERR) {
+        perror("Signal error!");
+        longjmp(jmp_buffer,100);
+    }
+    signal(SIGHUP, ignoreNohupHandler);
+        if (sigHandlerReturn == SIG_ERR) {
+        perror("Signal error!");
+        longjmp(jmp_buffer,100);
+    }
 
     char *file_name = NULL;
     int c;
@@ -52,7 +63,7 @@ int main(int argc, char *argv[]) {
         longjmp(jmp_buffer, 100);
     }
     
-    alarm(MAX_WAIT);
+    alarm(MAX_ALARM_WAIT);
 
     FILE * destination_file = stdout;
     if (file_name != NULL ) {
