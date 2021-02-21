@@ -28,7 +28,7 @@ int main(int argc, char *argv[]) {
         perror("Signal error!");
         longjmp(jmp_buffer,100);
     }
-    signal(SIGHUP, ignoreNohupHandler);
+    sigHandlerReturn = signal(SIGHUP, ignoreNohupHandler);
         if (sigHandlerReturn == SIG_ERR) {
         perror("Signal error!");
         longjmp(jmp_buffer,100);
