@@ -11,6 +11,8 @@
  */
 #include "jdumpertools.h"
 
+static const int MAX_WAIT = 60;
+
 int main(int argc, char *argv[]) {
     
     int val = setjmp(jmp_buffer);
@@ -18,6 +20,8 @@ int main(int argc, char *argv[]) {
         Message("ERROR: %s:%s:%d: Cannot recover, program will exit with an error now.\n", __FILE__, __func__, __LINE__)
         exit(val);
     }
+
+    signal(SIGALRM, alarmHandler);
 
     char *file_name = NULL;
     int c;
@@ -48,6 +52,8 @@ int main(int argc, char *argv[]) {
         longjmp(jmp_buffer, 100);
     }
     
+    alarm(MAX_WAIT);
+
     FILE * destination_file = stdout;
     if (file_name != NULL ) {
         destination_file = fopen(file_name, "w");
@@ -58,6 +64,6 @@ int main(int argc, char *argv[]) {
     }
 
     disk_details(argc, argv, destination_file, optind);
-    
+    alarm(0);
     return 0;
 }

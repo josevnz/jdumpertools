@@ -19,6 +19,8 @@
  */
 #include "jdumpertools.h"
 
+static const int MAX_ALARM_WAIT = 60;
+
 int main(int argc, char *argv[]) {
 
         int val = setjmp(jmp_buffer);
@@ -26,6 +28,8 @@ int main(int argc, char *argv[]) {
                 Message("FATAL: %s:%s, %d Cannot continue, will exit!\n", __FILE__, __func__, __LINE__)
                 exit(100);
         }
+
+        signal(SIGALRM, alarmHandler);
 
         char *file_name = NULL;
         int c;
@@ -51,6 +55,7 @@ int main(int argc, char *argv[]) {
                                 abort();
                 }
 
+        alarm(MAX_ALARM_WAIT);
         FILE * destination_file = stdout;
         if (file_name != NULL ) {
                 destination_file = fopen(file_name, "w");
@@ -64,5 +69,6 @@ int main(int argc, char *argv[]) {
         }
         print_utmp(destination_file);
         fclose(destination_file);
+        alarm(0);
         return (0);
 }

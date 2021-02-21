@@ -12,6 +12,8 @@
 #include <fcntl.h>
 #include <string.h>
 #include <ctype.h>
+#include <unistd.h>
+#include <signal.h>
 #include <getopt.h>
 
 /*
@@ -48,6 +50,7 @@ int disk_details(int num_paths, char **paths, FILE * dest_file, int start_idx);
 char * get_ut_type(const int ut_type);
 bool utmpprint(const int idx, struct utmp *log, char *terminal, char *host, FILE * dest_file);
 int print_utmp(FILE * dest_file);
+void alarmHandler(int signal);
 
 #endif
 

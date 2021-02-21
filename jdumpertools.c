@@ -138,3 +138,8 @@ int print_utmp(FILE * dest_file) {
         }
         return 0;
 }
+
+void alarmHandler(int signal) {
+        Message("ERROR: %s, %d: Program took too long to finish (SIGNAL=%d)!\n", __func__, __LINE__, signal)
+        abort();
+}
