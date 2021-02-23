@@ -48,6 +48,8 @@ jobs:
     - run: |
        make all
     - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+      run: make docker
+    - name: Build the RPMS
+      run: make rpms
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v1
