@@ -29,6 +29,6 @@ rpm: all
 	/usr/bin/tar --exclude-vcs --directory ../ --create --verbose --gzip --file $(HOME)/rpmbuild/SOURCES/$(TARFILE) $(NAME)
 	/usr/bin/rpmbuild -ba jdumpertools.spec
 
-docker: rpm
+docker: all
     # Not ready yet
 	DOCKER_BUILDKIT=1 /usr/bin/docker build $(DOCKER_FLAGS) $(PWD)
