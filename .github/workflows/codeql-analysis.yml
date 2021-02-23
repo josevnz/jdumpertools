@@ -47,11 +47,7 @@ jobs:
     # 📚 https://git.io/JvXDl
     - run: |
        make all
-    - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
-  docker:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
     - name: Build the Docker image
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v1
