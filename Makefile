@@ -25,7 +25,7 @@ clean:
 	/bin/rm -f $(TARGETS)
 
 rpm: all
-	/usr/bin/rpmdev-setuptree
+	test -x /usr/bin/rpmdev-setuptree && /usr/bin/rpmdev-setuptree|| /bin/mkdir -p -v ${HOME}/rpmbuild/{BUILD,RPMS,SOURCES,SPECS,SRPMS}
 	/usr/bin/tar --exclude-vcs --directory ../ --create --verbose --gzip --file $(HOME)/rpmbuild/SOURCES/$(TARFILE) $(NAME)
 	/usr/bin/rpmbuild -ba jdumpertools.spec
 
