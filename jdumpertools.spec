@@ -46,7 +46,7 @@ rm -rf %{buildroot}
 %files
 %{_bindir}/jdu
 %{_bindir}/jutmp
-%{_libdir}/libjdumpertools.so.*
+%{_libdir}/libjdumpertools.so.%{major}
 %license LICENSE
 %doc README.md
 %doc %{_mandir}/man8/jdu.1.gz
