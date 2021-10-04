@@ -14,7 +14,7 @@ DOCKER_FLAGS=--tag josevnz/jdumpertools:$(VERSION) --rm --pull --file Dockerfile
 all: $(TARGETS)
 
 libjdumpertools.so.${MAJOR}: jdumpertools.h jdumpertools.c
-	$(CC) $(CCFLAGS) -fPIC $^ -I $(PWD) -shared -Wl,-soname,libjdumpertools.so.${MAJOR} -o $@
+	$(CC) $(CCFLAGS) -fPIC $^ -I $(PWD) -shared -Wl,-soname,libjdumpertools.so -o $@
 
 jdu: jdumpertools.h jdu.c libjdumpertools.so.${MAJOR}
 	$(CC) $^ $(CCFLAGS) -L $(PWD) -l jdumpertools -o $@
