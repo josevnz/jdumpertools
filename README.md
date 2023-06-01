@@ -1,5 +1,7 @@
 # JDUMPERTOOLS
 
+![](mazinger-z.png)
+
 I wanted to have a few very fast set of programs to dump easy to get information from my Linux system into a JSON enabled search engine. I got tired of writing Python wrappers for them so here is the result.
 
 They do not intend to replace tools like 'du' or 'who' and their functionality is VERY limited on purpose. Their goal is:
